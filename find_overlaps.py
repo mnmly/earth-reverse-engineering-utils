@@ -77,6 +77,7 @@ def find_overlaps(bbox, max_octants_per_level):
 
     update_overlapping_octants("")
     for level in range(1, 21):
+        # print("len = %s level = %s" % (len(overlapping_octants[level]), level))
         if len(overlapping_octants[level]) >= max_octants_per_level:
             break
         for octant in overlapping_octants[level]:
@@ -97,8 +98,14 @@ if __name__ == "__main__":
     bbox = args_to_bbox(sys.argv[1:5])
     print(bbox)
 
-    overlapping_octants = find_overlaps(bbox, max_octants_per_level=10)
+    overlapping_octants = find_overlaps(bbox, 1000)
+    data = ""
     for level in sorted(overlapping_octants):
-        print(f"[Octant level {level}]")
+        # print(f"[Octant level {level}]")
+        data = data + "[Octant level " + str(level) + "]\n"
         for octant in overlapping_octants[level]:
             print(octant.path)
+            data = data + octant.path + "\n"
+    f = open(("octants_%s.txt" % ('-'.join(sys.argv[1:5]))), "a")
+    f.write(data)
+    f.close()
